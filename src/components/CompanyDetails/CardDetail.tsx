@@ -2,8 +2,8 @@ import { Card } from 'flowbite-react'; // Adjust import based on your actual set
 
 const CompanyOverview = () => {
   return (
-    <Card href="#" className="p-6 bg-white rounded-lg shadow-lg ">
-      <h4 className="text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">
+    <Card  className="px-2 bg-white rounded-lg shadow-lg select-text cursor-auto">
+      <h4 className="sm:text-2xl text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
         Digitalpage Company NZ Ltd
       </h4>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
@@ -27,6 +27,19 @@ const CompanyOverview = () => {
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
         <strong>Company Size:</strong> Medium (51-200 employees)
       </p>
+      <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mt-4">
+        Contact Information
+      </h5>
+      <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
+        Email: contact@digitalpage.co.nz
+      </p>
+      <p className="font-normal text-gray-700 dark:text-gray-400">
+        Phone: +64 123 456 789
+      </p>
+      <p className="font-normal text-gray-700 dark:text-gray-400">
+        Address: 123 Digital St, Auckland, New Zealand
+      </p>
+
     </Card>
   );
 };

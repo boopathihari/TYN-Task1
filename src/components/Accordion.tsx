@@ -47,12 +47,12 @@ export default function Filter() {
   const filterSections = [
     {
       title: 'Industry',
-      items: ['Finance', 'Healthcare', 'Manufacturing', 'Retail', 'Media & Entertainment','Energy'],
+      items: ['Finance', 'Healthcare', 'Manufacturing', 'Retail', 'Media & Entertainment','Energy','CyberSecurity' ],
       icon: LiaIndustrySolid
     },
     {
       title: 'Technology',
-      items: ['Frameworks and Libraries', 'Cloud Platforms','Database Technologies', 'DevOps Tools', 'AI and Machine Learning' ],
+      items: ['Frameworks and Libraries', 'Cloud Platforms','Database Technologies', 'DevOps Tools', 'AI and Machine Learning'],
       icon:GrTechnology
     },
     {
@@ -80,12 +80,6 @@ export default function Filter() {
       title: 'Founded Year',
       items: ['Before 2000','2000-2010', '2011-2020', 'After 2020'],
       icon: FaCalendarAlt
-    
-    },
-    {
-      title: 'Product Type',
-      items: ['SaaS', 'Hardware', 'Services'],
-      icon: AiFillProduct
     
     },
     {

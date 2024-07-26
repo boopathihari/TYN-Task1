@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from "./Header.tsx";
 import SearchBar from './SearchBar.tsx';
 import Accordion from './Accordion.tsx';
@@ -6,7 +6,8 @@ import line from '../../public/images/yellow.webp';
 import ViewType from '../components/ViewType.tsx';
 import CompanyList from '../components/CompanyList.tsx';
 
-export default function Home() {
+const Home: React.FC = () => {
+  const [activeView, setActiveView] = useState<"card" | "list">("card");
   return (
         <div className='bg-[#f8f9fa] w-full mb-10'>
         <Header/>
@@ -28,17 +29,21 @@ export default function Home() {
         <div className='sm:flex justify-between items-center flex-none '>
             <h1 className='sm:text-[2.4rem] text-3xl text-[#495057] font-medium '>Growth Tech Firms</h1>
             <div className='mt-2 sm:mt-0'>
-            <ViewType />
+            <ViewType activeView={activeView} setActiveView={setActiveView}/>
             </div>
         </div>
 
-          <CompanyList />
-
+          {/* Conditionally render based on activeView */}
+          {activeView === "card" ? (
+            <CompanyList viewType="card" />
+          ) : (
+            <CompanyList viewType="list" />
+          )}
+          
         </section>
-
-         
         </div>
-
       </div>
   )
 }
+
+export default Home;

@@ -1,49 +1,156 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Header from "./Header.tsx";
 import SearchBar from './SearchBar.tsx';
 import Accordion from './Accordion.tsx';
-import line from '../../public/images/yellow.webp';
 import ViewType from '../components/ViewType.tsx';
 import CompanyList from '../components/CompanyList.tsx';
+import { IoMdClose } from "react-icons/io";
+
+// Define the Company interface
+interface Company {
+  id: string;
+  name: string;
+  description: string;
+  logo: string;
+}
 
 const Home: React.FC = () => {
   const [activeView, setActiveView] = useState<"card" | "list">("card");
+  const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
+  const [checkedState, setCheckedState] = useState<{ [key: string]: { [item: string]: boolean } }>({});
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [results, setResults] = useState<Company[]>([]);
+
+  useEffect(() => {
+    fetchData();
+  }, [selectedFilters, searchTerm]);
+
+  const handleFilterChange = (category: string, item: string, isSelected: boolean) => {
+    setSelectedFilters(prevFilters => {
+      const updatedFilters = { ...prevFilters };
+      if (isSelected) {
+        if (!updatedFilters[category]) {
+          updatedFilters[category] = [];
+        }
+        if (!updatedFilters[category].includes(item)) {
+          updatedFilters[category].push(item);
+        }
+      } else {
+        updatedFilters[category] = updatedFilters[category].filter(filterItem => filterItem !== item);
+        if (updatedFilters[category].length === 0) {
+          delete updatedFilters[category];
+        }
+      }
+      return updatedFilters;
+    });
+
+    setCheckedState(prevState => ({
+      ...prevState,
+      [category]: {
+        ...prevState[category],
+        [item]: isSelected
+      }
+    }));
+  };
+
+  const constructQueryString = (filters: { [key: string]: string[] }, search: string) => {
+    const query = Object.entries(filters)
+      .map(([key, values]) => {
+        const formattedKey = key.toLowerCase().replace(/\s+/g, '');
+        return `${formattedKey}=${values.join(',')}`;
+      })
+      .join('&');
+
+    return query + (search ? `&search=${encodeURIComponent(search)}` : '');
+  };
+
+  const fetchData = async () => {
+    setLoading(true);
+    const queryString = constructQueryString(selectedFilters, searchTerm);
+    console.log(queryString);
+    try {
+      const response = await fetch(`http://localhost:3000/api/companies?${queryString}`);
+      const data = await response.json();
+      setCompanies(data.companies); // Assuming `setCompanies` is used to store the fetched companies
+      setResults(data.companies);
+    } catch (error) {
+      console.error('Error fetching company data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  const clearFilters = () => {
+    setSelectedFilters({});
+    setCheckedState({});
+    setSearchTerm('');
+    fetchData(); // Fetch all data without filters
+  };
+
+  const handleRemoveFilter = (category: string, item: string) => {
+    handleFilterChange(category, item, false);
+  };
+
+
   return (
-        <div className='bg-[#f8f9fa] w-full mb-10'>
-        <Header/>
+    <div className='bg-[#f8f9fa] w-full mb-10'>
+      <Header results={results}  setResults={setResults} />
 
-        <div className='w-[90%] mx-auto my-0 sm:flex gap-x-4 px-4 sm:mt-10 mb-10 mt-6'>
+      <div className='w-[90%] mx-auto my-0 sm:flex gap-x-4 px-4 sm:mt-10 mb-10 mt-6'>
 
-          {/* Filter Section */}
-          <section className='w-full sm:w-[25%] text-[14px]'> 
-             <Accordion />
-          </section>
+        {/* Filter Section */}
+        <section className='w-full sm:w-[25%] text-[14px]'> 
+          <Accordion onFilterChange={handleFilterChange} checkedState={checkedState} />
+        </section>
 
-          <div className='w-[100%] sm:p-4 py-4 sm:hidden '>
-            <SearchBar/>
-          </div>
+        <div className='w-[100%] sm:p-4 py-4 sm:hidden '>
+          <SearchBar results={results}  setResults={setResults} />
+        </div>
 
-          {/* Companies List  */}
+        {/* Companies List */}
         <section className='CardList sm:w-[75%] w-[100%] sm:mt-0 mt-4'>
-          
-        <div className='sm:flex justify-between items-center flex-none '>
+
+          <div className='sm:flex justify-between items-center flex-none '>
             <h1 className='sm:text-[2.4rem] text-3xl text-[#495057] font-medium '>Growth Tech Firms</h1>
             <div className='mt-2 sm:mt-0'>
-            <ViewType activeView={activeView} setActiveView={setActiveView}/>
+              <ViewType activeView={activeView} setActiveView={setActiveView} />
             </div>
-        </div>
+          </div>
+
+          {/* Selected Filters */}
+          <div className='flex flex-wrap gap-2 mt-4'>
+            {Object.entries(selectedFilters).map(([category, items]) =>
+              items.map(item => (
+                <div key={`${category}-${item}`} className='flex text-[#22b8cf] items-center border border-[#22b8cf]'>
+                  <span className='text-[12px] font-semibold px-2 py-1'>
+                   {category}: {item}
+                  </span>
+                  <IoMdClose className='text-lg cursor-pointer mr-2' onClick={() => handleRemoveFilter(category, item)} />
+                </div>
+              ))
+            )}
+            {Object.keys(selectedFilters).length > 0 && (
+              <button onClick={clearFilters} className='text-red-400 text-[12px] ml-2 font-semibold'>
+                Clear Filters
+              </button>
+            )}
+          </div>
 
           {/* Conditionally render based on activeView */}
-          {activeView === "card" ? (
-            <CompanyList viewType="card" />
+          {loading ? (
+            <div>Loading...</div>
           ) : (
-            <CompanyList viewType="list" />
+            <CompanyList viewType={activeView} companies={results} />
           )}
-          
+
         </section>
-        </div>
       </div>
-  )
-}
+    </div>
+  );
+};
 
 export default Home;

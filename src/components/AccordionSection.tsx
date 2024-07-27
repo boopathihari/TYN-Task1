@@ -8,14 +8,22 @@ interface AccordionSectionProps {
     items: string[];
     icon : React.ComponentType<{ className?: string }>;
     sectionIndex:number;
+    onFilterChange: (category: string, item: string, isSelected: boolean) => void;
+    checkedState: { [item: string]: boolean };
 }
 
-const AccordionSection: React.FC<AccordionSectionProps> = ({ title, items,icon: Icon,sectionIndex }) =>{
+const AccordionSection: React.FC<AccordionSectionProps> = ({ title, items,icon: Icon,sectionIndex,onFilterChange,checkedState }) =>{
     const [isOpen, setIsOpen] = useState(true);
 
   const toggleSection = () => {
     setIsOpen(!isOpen);
   };
+
+
+  const handleCheckboxChange = (item: string, isSelected: boolean) => {
+    onFilterChange(title, item, isSelected);
+  };
+
 
   return (
     <div className="border-b border-gray-200 p-2 ">
@@ -37,6 +45,8 @@ const AccordionSection: React.FC<AccordionSectionProps> = ({ title, items,icon: 
                 type="checkbox"
                 id={`checkbox-${sectionIndex}-${index}`}
                 className="form-checkbox h-4 w-4 border-[#adb5bd] text-[#22b8cf]  focus:outline-cyan-50 rounded"
+                checked={checkedState[item] || false}
+                onChange={(e) => handleCheckboxChange(item, e.target.checked)}
               />
               <label htmlFor={`checkbox-${sectionIndex}-${index}`} className="ml-2 text-[#495057] ">
                 {item}

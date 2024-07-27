@@ -53,12 +53,13 @@ router.post('/createCompany', async (req, res) => {
 // Get companies with search and filters
 router.get('/companies', async (req, res) => {
   try {
-    const { search, industry, technology, country, rating, fundingStatus, companySize, foundedYear, productType, customerType } = req.query;
+    const { search, industry, technology, country, analystrating, fundingStatus, companysize, foundedyear, producttypes, customertype } = req.query;
     let query = {};
 
     if (search) {
       query.name = { $regex: search, $options: 'i' };
     }
+    
     if (industry) {
       query.industry = { $in: industry.split(',') };
     }
@@ -70,8 +71,8 @@ router.get('/companies', async (req, res) => {
     }
     
    // Handling rating filter
-   if (rating) {
-    const ratingRanges = rating.split(',');
+   if (analystrating) {
+    const ratingRanges = analystrating.split(',');
     query.$or = query.$or || [];
 
     if (ratingRanges.includes('High')) {
@@ -90,11 +91,11 @@ router.get('/companies', async (req, res) => {
     if (fundingStatus) {
       query.fundingStatuses = { $in: fundingStatus.split(',') };
     }
-    if (companySize) {
-      query.companySize = { $in: companySize.split(',') };
+    if (companysize) {
+      query.companySize = { $in: companysize.split(',') };
     } 
-    if (foundedYear) { 
-      const foundedYearRanges = foundedYear.split(',');
+    if (foundedyear) { 
+      const foundedYearRanges = foundedyear.split(',');
       query.$or = [];
 
       if (foundedYearRanges.includes('Before 2000')) {
@@ -112,11 +113,11 @@ router.get('/companies', async (req, res) => {
 
       if (query.$or.length === 0) delete query.$or;
     }
-    if (productType) {
-      query.productTypes = { $in: productType.split(',') };
+    if (producttypes) {
+      query.productTypes = { $in: producttypes.split(',') };
     }
-    if (customerType) {
-      query.customerTypes = { $in: customerType.split(',') };
+    if (customertype) {
+      query.customerTypes = { $in: customertype.split(',') };
     }
 
 
@@ -150,19 +151,64 @@ router.get('/companies', async (req, res) => {
   }
 });
 
-
 // Get a single company profile
 router.get('/companies/:id', async (req, res) => {
   try {
-    const company = await Company.findById(req.params.id);
+    // Fetch a single company by ID
+    const company = await Company.findById(req.params.id).exec();
+
     if (!company) {
-      return res.status(404).send();
+      return res.status(404).send({ message: 'Company not found' });
     }
-    res.status(200).send(company);
+
+    // Process the logo image to base64 format
+    let imageSrc = '';
+    if (company.logo && company.logo.data) {
+      const base64Image = company.logo.data.toString('base64');
+      imageSrc = `data:${company.logo.contentType};base64,${base64Image}`;
+    }
+
+    
+    // Prepare the response with all data
+    const companyWithBase64Image = {
+      _id: company._id.toString(), 
+      name: company.name,
+      logo: imageSrc,
+      website: company.website,
+      description: company.description,
+      foundedYear: company.foundedYear,
+      industry: company.industry,
+      country: company.country,
+      companySize: company.companySize,
+      about: company.about,
+      coreValues: company.coreValues,
+      keyServices: company.keyServices,
+      technologiesUsed: company.technologiesUsed,
+      industriesServed: company.industriesServed,
+      solutions: company.solutions,
+      usp: company.usp,
+      useCases: company.useCases,
+      caseStudies: company.caseStudies,
+      fundingStatuses: company.fundingStatuses,
+      productTypes: company.productTypes,
+      customerTypes: company.customerTypes,
+      partners: company.partners,
+      awards: company.awards,
+      certifications: company.certifications,
+      companyHistory: company.companyHistory,
+      team: company.team,
+      sustainability: company.sustainability,
+      contactInfo: company.contactInfo,
+      ratings: company.ratings
+    };
+
+    res.status(200).send(companyWithBase64Image);
+    
   } catch (error) {
     res.status(500).send(error);
   }
 });
+
 
 
 // Delete all companies

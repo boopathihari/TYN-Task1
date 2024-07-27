@@ -9,9 +9,8 @@ import { useEffect, useState } from "react";
 
 interface CompanyListProps {
   viewType: "card" | "list";
+  companies: Company[];
 }
-
-
 
 interface Company {
   id: string;
@@ -27,32 +26,7 @@ const truncateText = (text: string, maxLength: number) => {
   return text.substring(0, maxLength) + "...";
 };
 
-const CompanyList: React.FC<CompanyListProps> = ({viewType}) => {
-  const [cardsData, setCardsData] = useState<Company[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCompanyData = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/companies'); // Adjust this URL to your API
-        const data = await response.json();
-        setCardsData(data.companies); // Assuming the data is in `data.companies`
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching company data:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchCompanyData();
-  }, []);
-
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-
+const CompanyList: React.FC<CompanyListProps> = ({viewType,companies=[]}) => {
 
   return (
     <div>
@@ -60,8 +34,8 @@ const CompanyList: React.FC<CompanyListProps> = ({viewType}) => {
         <div className="card-view">
           <div className="flex gap-4 mt-6 flex-wrap">
 
-            {cardsData.map(card => (
-                <Link to={`/profile/${card.id}`} key={card.id} className="sm:w-[32%] w-[100%] ">
+            {companies.map(card => (
+              <Link to={`/profile/${card.id}`} key={card.id} className="sm:w-[32%] w-[100%] ">
               <Card className="h-[100%] relative hover:border hover:border-[#22b8cf] hover:border-1 cursor-pointer">
                 <img
                   src={card.logo}
@@ -87,7 +61,7 @@ const CompanyList: React.FC<CompanyListProps> = ({viewType}) => {
         </div>
       ) : (
         <div className="list-view mt-10">
-          {cardsData.map(card => (
+          {companies.map(card => (
             <Link to={`/profile/${card.id}`} key={card.id}>
               <div className="flex flex-row items-center gap-4 bg-white p-6 rounded-lg shadow-md mb-4 hover:border hover:border-[#22b8cf] cursor-pointer">
                 <img
@@ -96,8 +70,11 @@ const CompanyList: React.FC<CompanyListProps> = ({viewType}) => {
                   className="sm:w-24 sm:h-24 w-12 h-12 object-cover"
                 />
                 <div className="flex-1">
-                  <h5 className="text-xl font-bold tracking-tight text-gray-900 dark:text-white text-lg">
+                  <h5 className="sm:text-xl font-bold tracking-tight text-gray-900 dark:text-white hidden sm:block">
                     {truncateText(card.name, 30)}
+                  </h5>
+                  <h5 className="sm:text-xl font-bold tracking-tight text-gray-900 dark:text-white block sm:hidden">
+                    {truncateText(card.name, 10)}
                   </h5>
                   <p className="font-normal text-gray-700 dark:text-gray-400 text-sm sm:block hidden">
                     {truncateText(card.description, 90)}

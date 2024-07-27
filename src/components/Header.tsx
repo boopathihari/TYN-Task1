@@ -5,7 +5,19 @@ import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import Logo from '../../public/images/tyn-logo.png';
 import SearchBar  from './SearchBar';
 
-export default function Header() {
+interface Company {
+  id: string;
+  name: string;
+  description: string;
+  logo: string;
+}
+
+interface SearchBarProps {
+  results: Company[];
+  setResults: React.Dispatch<React.SetStateAction<Company[]>>;
+}
+
+const Header: React.FC<SearchBarProps> = ({ results, setResults }) => {
   return (
     
     <div className='p-2 bg-white'>
@@ -18,7 +30,7 @@ export default function Header() {
       <div className="flex flex-row-reverse gap-[4px] sm:flex-row sm:gap-0">
         <Navbar.Toggle />
         <div className='hidden sm:block'>
-        <SearchBar/>
+        <SearchBar results={results} setResults={setResults}/>
         </div>
       </div>
       
@@ -40,3 +52,5 @@ export default function Header() {
 
 
 
+
+export default Header;

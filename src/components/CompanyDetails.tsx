@@ -35,20 +35,27 @@ export default function Component() {
   
   const tabsRef = useRef<TabsRef>(null);
   const [activeTab, setActiveTab] = useState(0);
+  const navigate = useNavigate();
 
 
   useEffect(() => {
     const fetchCompany = async () => {
       try {
         const response = await fetch(`http://localhost:3000/api/companies/${id}`);
+        console.log('Response:', response); // Log the response
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
-        console.log(data);
+        console.log('Data:', data); 
+        console.log(data.technologiesUsed);
         setCompany(data);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching company details:', error);
         setLoading(false);
       }
+      
     };
 
     fetchCompany();
@@ -62,7 +69,6 @@ export default function Component() {
   if (!company) {
     return <div>No company data found.</div>;
   }
-  const navigate = useNavigate();
 
   return (
     <div className="realtive flex flex-col gap-3">
@@ -73,7 +79,7 @@ export default function Component() {
 
 <div className="relative h-[100vh] w-[100%] ">
       <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/')}
           className="absolute top-0 z-50 left-2 sm:left-[6rem] text-[1rem] text-[#495057]  hover:underline bg-white rounded px-3 py-1 flex justify-center items-center gap-2 m-4">
           <IoMdArrowBack /> Back
         </button>
@@ -85,7 +91,7 @@ export default function Component() {
     />
   <div className="absolute sm:top-[5rem] sm:left-[6rem] top-[1rem] left-[9rem]">
         <div className="bg-white p-6 rounded-sm shadow-md ">
-          <img src={Logo} className="w-[5rem] h-[5rem]" alt="" />
+          <img src={company.logo} className="w-[5rem] h-[5rem] object-cover" alt="" />
         </div>
     </div>
     <div className="sm:absolute right-20 sm:top-10 flex gap-3 justify-center sm:pt-0 pt-[40%]">
@@ -102,12 +108,12 @@ export default function Component() {
             <div className="sm:w-[90%] sm:flex justify-between  gap-4 w-full">
                 {/* Company Details */}
                 <div className="sm:w-[40%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                <CardDetail company={company}/>
+                <CardDetail company={company} />
                 </div>
 
                 {/* About */}
                 <div className="sm:w-[60%]  w-[96%] sm:text-[1rem] text-[14px]">
-                  {/* <About company={company}/> */}
+                  <About company={company}/>
                 </div>
             </div>
         </Tabs.Item>
@@ -116,12 +122,12 @@ export default function Component() {
         <div className="sm:w-[90%] sm:flex justify-between gap-4 w-full">
           {/* Industries  */}
           <div className="sm:w-[50%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                {/* <Industry company={company}/> */}
+                <Industry company={company}/>
             </div>
                     
                 {/* Technology */}
                 <div className="sm:w-[50%] w-[96%] sm:text-[1rem] text-[14px]">
-                {/* <Technology company={company}/> */}
+                <Technology company={company}/>
                 </div>
         </div>
         </Tabs.Item>
@@ -130,7 +136,7 @@ export default function Component() {
         <div className="sm:w-[90%] flex justify-center gap-4 w-full">
           {/* Solution  */}
           <div className="sm:w-[80%] w-[90%] sm:text-[1rem] text-[14px]">
-                {/* <Solution company={company}/> */}
+                <Solution company={company}/>
             </div>
         </div>
         </Tabs.Item>
@@ -138,12 +144,12 @@ export default function Component() {
         <div className="sm:w-[90%]  sm:flex justify-between gap-4 w-full">
           {/* Usp  */}
               <div className="sm:w-[40%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                    {/* <USP company={company}/> */}
+                    <USP company={company}/>
                 </div>
 
                 {/* Use case */}
                 <div className="sm:w-[60%]  w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                {/* <UseCase company={company}/> */}
+                <UseCase company={company}/>
                 </div>  
         </div>
         </Tabs.Item>
@@ -152,7 +158,7 @@ export default function Component() {
         <div className="sm:w-[90%] sm:flex justify-center gap-4 w-full">
            {/* Case Study */}
            <div className="sm:w-[80%]  w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                {/* <CaseStudy company={company}/> */}
+                <CaseStudy company={company}/>
             </div>
         </div>
         </Tabs.Item>
@@ -161,13 +167,13 @@ export default function Component() {
         <div className="sm:w-[90%] sm:flex justify-center gap-4 w-full">
            {/* Others  */}
            <div className="sm:w-[40%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                {/* <Rating company={company}/> */}
+                <Rating company={company}/>
             </div>
                     
                 
                 {/* Partners */}
                 <div className="sm:w-[60%] w-[96%] mb-4 sm:text-[1rem] text-[14px] ">
-                {/* <Partners company={company}/> */}
+                <Partners company={company}/>
                 </div>
         </div>
         </Tabs.Item>
@@ -176,7 +182,7 @@ export default function Component() {
         <div className="sm:w-[90%]  sm:flex justify-center gap-4 w-full">
            {/* Others  */}
            <div className="sm:w-[80%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                {/* <Others company={company}/> */}
+                <Others company={company}/>
             </div>
         </div>
         </Tabs.Item>

@@ -1,9 +1,11 @@
 import { Card } from 'flowbite-react'; // Adjust import based on your actual setup
 import { Company } from './types';
 
+
 interface CardDetailProps {
-  company: Company;
+  company: Company,
 }
+
 
 const CardDetail: React.FC<CardDetailProps> = ({ company }) => {
 
@@ -16,34 +18,34 @@ const CardDetail: React.FC<CardDetailProps> = ({ company }) => {
         <strong>Company Name:</strong> {company.name}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Website:</strong> <a href="https://digitalpage.nz" className="text-blue-600">https://digitalpage.nz</a>
+        <strong>Website:</strong> <a href="https://digitalpage.nz" className="text-blue-600">{company.website}</a>
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Description:</strong> Digitalpage Company NZ Ltd is a leading provider of digital marketing solutions. We specialize in delivering cutting-edge marketing strategies and technologies to help businesses grow online.
+        <strong>Description:</strong> {company.description}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Founded Year:</strong> 2015
+        <strong>Founded Year:</strong> {company.foundedYear}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Industry:</strong> Marketing & Advertising
+        <strong>Industry:</strong> {company.industry}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Country:</strong> New Zealand
+        <strong>Country:</strong> {company.industry}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Company Size:</strong> Medium (51-200 employees)
+        <strong>Company Size:</strong>  {company.companySize}
       </p>
       <h5 className="text-xl font-semibold tracking-tight text-gray-900 dark:text-white mt-4">
         Contact Information
       </h5>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        Email: contact@digitalpage.co.nz
+        Email: {company.contactInfo.email}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400">
-        Phone: +64 123 456 789
+        Phone: {company.contactInfo.phone}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400">
-        Address: 123 Digital St, Auckland, New Zealand
+        Address: {company.contactInfo.address}
       </p>
 
     </Card>

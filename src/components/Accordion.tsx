@@ -32,10 +32,19 @@ interface FilterData {
 }
 
 
-export default function Filter() {const [filterData, setFilterData] = useState<FilterData | null>(null);
+interface AccordionProps {
+  onFilterChange: (category: string, item: string, isSelected: boolean) => void;
+  checkedState: { [key: string]: { [item: string]: boolean } };
+}
+
+
+const Filter: React.FC<AccordionProps> = ({onFilterChange, checkedState}) => {
+  
+  const [filterData, setFilterData] = useState<FilterData | null>(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isOpen, setIsOpen] = useState(!isMobile);
 
+  
   useEffect(() => {
     const fetchFilters = async () => {
       try {
@@ -81,8 +90,6 @@ export default function Filter() {const [filterData, setFilterData] = useState<F
     { title: 'Founded Year', items: ['Before 2000', '2000-2010', '2011-2020', 'After 2020'], icon: FaCalendarAlt }
   ];
 
-
-
   return (
     <div className="max-w-md mx-auto bg-white border border-gray-200 rounded-lg ">
       <div className="flex justify-between items-center p-4 border-b border-gray-200" onClick={toggleSection}>
@@ -114,11 +121,17 @@ export default function Filter() {const [filterData, setFilterData] = useState<F
           items={section.items}
           icon={section.icon}
           sectionIndex={index}
+          onFilterChange={onFilterChange}
+          checkedState={checkedState[section.title] || {}}
         />
       ))}
     </>
     }
     
+    
     </div>
   )
 }
+
+
+export default Filter;

@@ -9,7 +9,7 @@ export interface ContactInfo {
     customerSatisfaction: number;
     industryRecognition: string[];
   }
-  
+
   export interface TeamMember {
     name: string;
     role: string;

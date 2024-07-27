@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors'); 
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const companyRoutes = require('./Routes/company');
@@ -8,6 +9,11 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+
+
+app.use(cors()); // Allow all origins
+
 
 // Middleware
 app.use(bodyParser.json());

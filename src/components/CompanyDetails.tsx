@@ -1,6 +1,6 @@
 import { Button, Tabs, TabsRef } from "flowbite-react";
-import { useNavigate } from 'react-router-dom';
-import { useRef, useState } from "react";
+import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from "react";
 import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
 import { MdDashboard } from "react-icons/md";
 import Header from "./Header";
@@ -29,8 +29,39 @@ import Others from '../components/CompanyDetails/Others.tsx';
 import { IoMdArrowBack } from "react-icons/io";
 
 export default function Component() {
+  const { id } = useParams(); // Get ID from URL params
+  const [company, setCompany] = useState<any>(null); // Replace 'any' with the proper type
+  const [loading, setLoading] = useState(true);
+  
   const tabsRef = useRef<TabsRef>(null);
   const [activeTab, setActiveTab] = useState(0);
+
+
+  useEffect(() => {
+    const fetchCompany = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/api/companies/${id}`);
+        const data = await response.json();
+        console.log(data);
+        setCompany(data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching company details:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchCompany();
+  }, [id]);
+  
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!company) {
+    return <div>No company data found.</div>;
+  }
   const navigate = useNavigate();
 
   return (
@@ -71,12 +102,12 @@ export default function Component() {
             <div className="sm:w-[90%] sm:flex justify-between  gap-4 w-full">
                 {/* Company Details */}
                 <div className="sm:w-[40%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                <CardDetail/>
+                <CardDetail company={company}/>
                 </div>
 
                 {/* About */}
                 <div className="sm:w-[60%]  w-[96%] sm:text-[1rem] text-[14px]">
-                  <About/>
+                  {/* <About company={company}/> */}
                 </div>
             </div>
         </Tabs.Item>
@@ -85,12 +116,12 @@ export default function Component() {
         <div className="sm:w-[90%] sm:flex justify-between gap-4 w-full">
           {/* Industries  */}
           <div className="sm:w-[50%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                <Industry/>
+                {/* <Industry company={company}/> */}
             </div>
                     
                 {/* Technology */}
                 <div className="sm:w-[50%] w-[96%] sm:text-[1rem] text-[14px]">
-                <Technology/>
+                {/* <Technology company={company}/> */}
                 </div>
         </div>
         </Tabs.Item>
@@ -99,7 +130,7 @@ export default function Component() {
         <div className="sm:w-[90%] flex justify-center gap-4 w-full">
           {/* Solution  */}
           <div className="sm:w-[80%] w-[90%] sm:text-[1rem] text-[14px]">
-                <Solution/>
+                {/* <Solution company={company}/> */}
             </div>
         </div>
         </Tabs.Item>
@@ -107,12 +138,12 @@ export default function Component() {
         <div className="sm:w-[90%]  sm:flex justify-between gap-4 w-full">
           {/* Usp  */}
               <div className="sm:w-[40%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                    <USP/>
+                    {/* <USP company={company}/> */}
                 </div>
 
                 {/* Use case */}
                 <div className="sm:w-[60%]  w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                <UseCase/>
+                {/* <UseCase company={company}/> */}
                 </div>  
         </div>
         </Tabs.Item>
@@ -121,7 +152,7 @@ export default function Component() {
         <div className="sm:w-[90%] sm:flex justify-center gap-4 w-full">
            {/* Case Study */}
            <div className="sm:w-[80%]  w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                <CaseStudy/>
+                {/* <CaseStudy company={company}/> */}
             </div>
         </div>
         </Tabs.Item>
@@ -130,13 +161,13 @@ export default function Component() {
         <div className="sm:w-[90%] sm:flex justify-center gap-4 w-full">
            {/* Others  */}
            <div className="sm:w-[40%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                <Rating/>
+                {/* <Rating company={company}/> */}
             </div>
                     
                 
                 {/* Partners */}
                 <div className="sm:w-[60%] w-[96%] mb-4 sm:text-[1rem] text-[14px] ">
-                <Partners/>
+                {/* <Partners company={company}/> */}
                 </div>
         </div>
         </Tabs.Item>
@@ -145,7 +176,7 @@ export default function Component() {
         <div className="sm:w-[90%]  sm:flex justify-center gap-4 w-full">
            {/* Others  */}
            <div className="sm:w-[80%] w-[96%] mb-4 sm:text-[1rem] text-[14px]">
-                <Others/>
+                {/* <Others company={company}/> */}
             </div>
         </div>
         </Tabs.Item>

@@ -1,13 +1,19 @@
 import { Card } from 'flowbite-react'; // Adjust import based on your actual setup
+import { Company } from './types';
 
-const CompanyOverview = () => {
+interface CardDetailProps {
+  company: Company;
+}
+
+const CardDetail: React.FC<CardDetailProps> = ({ company }) => {
+
   return (
     <Card  className="px-2 bg-white rounded-lg shadow-lg select-text cursor-auto">
       <h4 className="sm:text-2xl text-xl font-semibold tracking-tight text-gray-900 dark:text-white">
-        Digitalpage Company NZ Ltd
+        Company Details
       </h4>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Company Name:</strong> Digitalpage Company NZ Ltd
+        <strong>Company Name:</strong> {company.name}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
         <strong>Website:</strong> <a href="https://digitalpage.nz" className="text-blue-600">https://digitalpage.nz</a>
@@ -44,4 +50,4 @@ const CompanyOverview = () => {
   );
 };
 
-export default CompanyOverview;
+export default CardDetail;

@@ -7,9 +7,10 @@ interface AccordionSectionProps {
     title: string;
     items: string[];
     icon : React.ComponentType<{ className?: string }>;
+    sectionIndex:number;
 }
 
-const AccordionSection: React.FC<AccordionSectionProps> = ({ title, items,icon: Icon }) =>{
+const AccordionSection: React.FC<AccordionSectionProps> = ({ title, items,icon: Icon,sectionIndex }) =>{
     const [isOpen, setIsOpen] = useState(true);
 
   const toggleSection = () => {
@@ -31,13 +32,13 @@ const AccordionSection: React.FC<AccordionSectionProps> = ({ title, items,icon: 
       {isOpen && (
         <div className="p-4 ml-8">
           {items.map((item, index) => (
-            <div key={index} className="flex items-center mb-2">
+            <div key={`${sectionIndex}-${index}`}  className="flex items-center mb-2">
               <input
                 type="checkbox"
-                id={`checkbox-${index}`}
+                id={`checkbox-${sectionIndex}-${index}`}
                 className="form-checkbox h-4 w-4 border-[#adb5bd] text-[#22b8cf]  focus:outline-cyan-50 rounded"
               />
-              <label htmlFor={`checkbox-${index}`} className="ml-2 text-[#495057] ">
+              <label htmlFor={`checkbox-${sectionIndex}-${index}`} className="ml-2 text-[#495057] ">
                 {item}
               </label>
             </div>

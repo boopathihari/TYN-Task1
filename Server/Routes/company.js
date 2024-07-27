@@ -3,8 +3,6 @@ const router = express.Router();
 const multer = require('multer');
 const Company = require('../Models/company');
 
-
-
 // Set up multer for file uploads
 const storage = multer.memoryStorage(); // Store files in memory
 const upload = multer({ storage });
@@ -133,6 +131,7 @@ router.get('/companies', async (req, res) => {
         imageSrc = `data:${company.logo.contentType};base64,${base64Image}`;
       }
       return {
+        id:company._id,
         name: company.name,
         description: company.description,
         logo: imageSrc
@@ -194,13 +193,10 @@ router.get('/filters', async (req, res) => {
     const industries = await Company.distinct('industry');
     const technologies = await Company.distinct('technologiesUsed');
     const countries = await Company.distinct('country');
-    const fundingStatuses = await Company.distinct('fundingStatus');
+    const fundingStatuses = await Company.distinct('fundingStatuses');
     const companySizes = await Company.distinct('companySize');
-    const productTypes = await Company.distinct('productType');
-    const customerTypes = await Company.distinct('customerType');
-    const ratings = await Company.aggregate([
-      { $group: { _id: "$ratings.customerSatisfaction" } }
-    ]);
+    const productTypes = await Company.distinct('productTypes');
+    const customerTypes = await Company.distinct('customerTypes');
 
     res.status(200).send({
       industries,
@@ -210,7 +206,6 @@ router.get('/filters', async (req, res) => {
       companySizes,
       productTypes,
       customerTypes,
-      ratings: ratings.map(r => r._id)
     });
   } catch (error) {
     res.status(500).send(error);

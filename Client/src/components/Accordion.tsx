@@ -13,8 +13,6 @@ import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useState } from "react";
 import { Spinner } from "flowbite-react";
 
-
-
 interface FilterData {
   industries: string[];
   technologies: string[];
@@ -66,14 +64,14 @@ const Filter: React.FC<AccordionProps> = ({ onFilterChange, checkedState }) => {
   };
 
   const filterSections = [
-    { title: 'Industry', items: filterData?.industries, icon: LiaIndustrySolid },
-    { title: 'Technology', items: filterData?.technologies, icon: GrTechnology },
-    { title: 'Country', items: filterData?.countries, icon: FaLocationDot },
-    { title: 'Funding Status', items: filterData?.fundingStatuses, icon: RiRefund2Line },
-    { title: 'Company Size', items: filterData?.companySizes, icon: IoMdResize },
+    { title: 'Industry', items: filterData?.industries || [], icon: LiaIndustrySolid },
+    { title: 'Technology', items: filterData?.technologies || [], icon: GrTechnology },
+    { title: 'Country', items: filterData?.countries || [], icon: FaLocationDot },
+    { title: 'Funding Status', items: filterData?.fundingStatuses || [], icon: RiRefund2Line },
+    { title: 'Company Size', items: filterData?.companySizes || [], icon: IoMdResize },
     { title: 'Analyst Rating', items: ['High', 'Medium', 'Low'], icon: IoAnalytics },
-    { title: 'Product Types', items: filterData?.productTypes, icon: IoMdResize },
-    { title: 'Customer Type', items: filterData?.customerTypes, icon: GrBusinessService },
+    { title: 'Product Types', items: filterData?.productTypes || [], icon: IoMdResize },
+    { title: 'Customer Type', items: filterData?.customerTypes || [], icon: GrBusinessService },
     { title: 'Founded Year', items: ['Before 2000', '2000-2010', '2011-2020', 'After 2020'], icon: FaCalendarAlt }
   ];
 

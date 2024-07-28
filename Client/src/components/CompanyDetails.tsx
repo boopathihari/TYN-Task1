@@ -22,40 +22,6 @@ import Partners from '../components/CompanyDetails/Partners';
 import Others from '../components/CompanyDetails/Others';
 import { IoMdArrowBack } from "react-icons/io";
 
-interface Company {
-  id: string;
-  _id: string; // Added _id property
-  name: string;
-  logo: string;
-  website: string; // Added website property
-  description: string;
-  foundedYear: number;
-  industry: string;
-  country: string;
-  companySize: string;
-  contactInformation: string;
-  about: string;
-  coreValues: string[];
-  keyServices: string[];
-  technologiesUsed: string[];
-  industriesServed: string[];
-  solutions: string[];
-  usp: string;
-  useCases: string[];
-  caseStudies: string[];
-  ratings: number;
-  partners: string[];
-  awards: string[];
-  recognitions: string[];
-  certifications: string[];
-  history: string;
-  team: string[];
-  sustainabilityCommitment: string;
-  fundingStatuses: string[]; // Added fundingStatuses property
-  productTypes: string[]; // Added productTypes property
-  customerTypes: string[]; // Added customerTypes property
-}
-
 export default function Component() {
   const { id } = useParams(); // Get ID from URL params
   const [company, setCompany] = useState<any>(null); // Replace 'any' with the proper type

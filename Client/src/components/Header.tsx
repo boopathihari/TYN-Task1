@@ -34,7 +34,7 @@ const Header: React.FC<SearchBarProps> = ({ results, setResults }) => {
             <div className="flex flex-row-reverse gap-[4px] sm:flex-row sm:gap-0">
               <Navbar.Toggle />
               <div className='hidden sm:block'>
-                <SearchBar results={results} setResults={setResults} />
+                <SearchBar setResults={setResults} />
               </div>
             </div>
             

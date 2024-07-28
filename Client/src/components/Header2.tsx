@@ -8,7 +8,7 @@ const Header2 = () => {
   return (
     
     <div className='p-2 bg-white sticky top-0 z-50 w-[100%] '>
-<Navbar className='w-[90%] mx-auto my-0'>
+    <Navbar className='w-[90%] mx-auto my-0'>
       <Navbar.Brand href="/">
         <img src={Logo} className="mr-3 h-6 sm:h-9" alt="Flowbite React Logo" />
       </Navbar.Brand>

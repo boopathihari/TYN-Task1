@@ -1,9 +1,5 @@
-
-import React from 'react'
-
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
+import {Navbar } from "flowbite-react";
 import Logo from '../../public/images/tyn-logo.png';
-import SearchBar  from './SearchBar';
 import { LiaIndustrySolid } from "react-icons/lia";
 import { CiBookmark } from "react-icons/ci";
 import { Link } from "react-router-dom";

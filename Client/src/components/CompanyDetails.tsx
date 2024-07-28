@@ -1,31 +1,60 @@
 import { Button, Tabs, TabsRef, Spinner } from "flowbite-react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from "react";
-import { HiAdjustments, HiClipboardList, HiUserCircle } from "react-icons/hi";
-import { MdDashboard } from "react-icons/md";
-import Header2 from "./Header2.tsx";
+import Header2 from "./Header2";
 import Background from '../../public/images/background.jpg';
-import Logo from '../../public/images/companyLogo1.webp';
-import CardDetail from './CompanyDetails/CardDetail.tsx';
+import CardDetail from './CompanyDetails/CardDetail';
 import { FaRegBookmark } from "react-icons/fa";
 import { PiPlugsConnectedBold } from "react-icons/pi"; 
 import { GrOverview, GrTechnology } from "react-icons/gr";
-import { AiOutlineSolution } from "react-icons/ai";
 import { FaRegLightbulb } from "react-icons/fa6";
 import { IoBookOutline } from "react-icons/io5";
 import { FaRegStar } from "react-icons/fa";
 import { LiaIndustrySolid } from "react-icons/lia";
-import About from '../components/CompanyDetails/AboutDetails.tsx';
-import Industry from '../components/CompanyDetails/Industry.tsx';
-import Technology from '../components/CompanyDetails/Technology.tsx';
-import Solution from '../components/CompanyDetails/Solution.tsx';
-import USP from '../components/CompanyDetails/USP.tsx';
-import UseCase from '../components/CompanyDetails/UseCase.tsx';
-import CaseStudy from '../components/CompanyDetails/CaseStudy.tsx';
-import Rating from '../components/CompanyDetails/Rating.tsx';
-import Partners from '../components/CompanyDetails/Partners.tsx';
-import Others from '../components/CompanyDetails/Others.tsx';
+import About from '../components/CompanyDetails/AboutDetails';
+import Industry from '../components/CompanyDetails/Industry';
+import Technology from '../components/CompanyDetails/Technology';
+import USP from '../components/CompanyDetails/USP';
+import UseCase from '../components/CompanyDetails/UseCase';
+import CaseStudy from '../components/CompanyDetails/CaseStudy';
+import Rating from '../components/CompanyDetails/Rating';
+import Partners from '../components/CompanyDetails/Partners';
+import Others from '../components/CompanyDetails/Others';
 import { IoMdArrowBack } from "react-icons/io";
+
+interface Company {
+  id: string;
+  _id: string; // Added _id property
+  name: string;
+  logo: string;
+  website: string; // Added website property
+  description: string;
+  foundedYear: number;
+  industry: string;
+  country: string;
+  companySize: string;
+  contactInformation: string;
+  about: string;
+  coreValues: string[];
+  keyServices: string[];
+  technologiesUsed: string[];
+  industriesServed: string[];
+  solutions: string[];
+  usp: string;
+  useCases: string[];
+  caseStudies: string[];
+  ratings: number;
+  partners: string[];
+  awards: string[];
+  recognitions: string[];
+  certifications: string[];
+  history: string;
+  team: string[];
+  sustainabilityCommitment: string;
+  fundingStatuses: string[]; // Added fundingStatuses property
+  productTypes: string[]; // Added productTypes property
+  customerTypes: string[]; // Added customerTypes property
+}
 
 export default function Component() {
   const { id } = useParams(); // Get ID from URL params
@@ -33,7 +62,7 @@ export default function Component() {
   const [loading, setLoading] = useState(true);
   
   const tabsRef = useRef<TabsRef>(null);
-  const [activeTab, setActiveTab] = useState(0);
+  const [, setActiveTab] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -67,6 +96,7 @@ export default function Component() {
           <Spinner aria-label="Extra large spinner example" size="xl" className='h-[50vh]' />
         </div>
       ) : (
+        company && ( // Check if company is not null
         <div className="relative w-[100%] mx-auto my-0">
           <div className="relative h-[100vh] w-[100%] ">
             <button
@@ -96,6 +126,7 @@ export default function Component() {
                 <FaRegBookmark className="w-4 h-4 mr-2" /> Bookmark
               </Button>
             </div>
+            
             <div className="flex w-[100%]  absolute sm:top-[9rem]  top-[16rem]">
               <Tabs aria-label="Company profile tabs" className="sm:w-[90%] sm:ml-[8%] pl-4 flex gap-4 mb-10 w-[100%]" ref={tabsRef} onActiveTabChange={(tab) => setActiveTab(tab)}>
                 <Tabs.Item active title="Overview" icon={GrOverview} className="outline-none focus:outline-none " >
@@ -126,14 +157,7 @@ export default function Component() {
                   </div>
                 </Tabs.Item>
 
-                {/* <Tabs.Item title="Solutions" icon={AiOutlineSolution}>
-                  <div className="sm:w-[90%] flex justify-center gap-4 w-full"> */}
-                    {/* Solution */}
-                    {/* <div className="sm:w-[80%] w-[90%] sm:text-[1rem] text-[14px]">
-                      <Solution company={company} />
-                    </div>
-                  </div>
-                </Tabs.Item> */}
+               
                 <Tabs.Item title="USP & Use Cases" icon={FaRegLightbulb}>
                   <div className="sm:w-[90%]  sm:flex justify-between gap-4 w-full">
                     {/* Usp */}
@@ -183,6 +207,7 @@ export default function Component() {
             </div>
           </div>
         </div>
+        )
       )}
     </div>
   );

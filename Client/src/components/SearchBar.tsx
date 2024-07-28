@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TextInput } from "flowbite-react";
-import { CiSearch } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import axios from 'axios';
 import { IoSearch } from "react-icons/io5";
@@ -13,11 +12,11 @@ interface Company {
 }
 
 interface SearchBarProps {
-  results: Company[];
+  // results: Company[];
   setResults: React.Dispatch<React.SetStateAction<Company[]>>;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ results, setResults }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [suggestions, setSuggestions] = useState<Company[]>([]);
   const suggestionsRef = useRef<HTMLUListElement>(null);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button } from "flowbite-react";
-import { FaRegBookmark, FaBookmark } from "react-icons/fa6";
+import { FaBookmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Header2 from './Header2';
 

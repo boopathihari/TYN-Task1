@@ -21,10 +21,9 @@ const Home: React.FC = () => {
   const [activeView, setActiveView] = useState<"card" | "list">("card");
   const [selectedFilters, setSelectedFilters] = useState<{ [key: string]: string[] }>({});
   const [checkedState, setCheckedState] = useState<{ [key: string]: { [item: string]: boolean } }>({});
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [results, setResults] = useState<Company[]>([]);
   const [showScroll, setShowScroll] = useState(false); // State for showing scroll button
 
@@ -127,7 +126,7 @@ const Home: React.FC = () => {
         </section>
 
         <div className='w-[100%] sm:p-4 py-4 sm:hidden '>
-          <SearchBar results={results} setResults={setResults} />
+          <SearchBar setResults={setResults} />
         </div>
 
         {/* Companies List */}

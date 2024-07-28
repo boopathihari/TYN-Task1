@@ -1,20 +1,13 @@
 import React, { useEffect } from 'react'
-import { Accordion, AccordionContent, AccordionPanel, AccordionTitle } from "flowbite-react";
 import AccordionSection from './AccordionSection';
-
-import { CiSearch } from "react-icons/ci";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoFilterSharp } from "react-icons/io5";
-
 import { LiaIndustrySolid } from 'react-icons/lia';
 import { GrTechnology } from 'react-icons/gr';
-import { CiLocationOn } from 'react-icons/ci';
 import { RiRefund2Line } from 'react-icons/ri';
 import { IoAnalytics } from "react-icons/io5";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoMdResize } from "react-icons/io";
 import { FaCalendarAlt } from "react-icons/fa";
-import { AiFillProduct } from "react-icons/ai";
 import { GrBusinessService } from "react-icons/gr";
 import { IoMdCloseCircleOutline } from "react-icons/io";
 import { useState } from "react";

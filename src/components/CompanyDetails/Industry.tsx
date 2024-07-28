@@ -27,6 +27,8 @@ const Industry: React.FC<IndustryProps> = ({ company }) => {
         ))}
     </ul>
 
+    
+
     </Card>
   );
 };

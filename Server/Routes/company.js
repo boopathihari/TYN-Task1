@@ -2,39 +2,110 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Company = require('../Models/company');
+const Bookmark = require('../Models/bookmark'); // Assuming you have a Bookmark model
+const { faker } = require('@faker-js/faker');
+
 
 // Set up multer for file uploads
 const storage = multer.memoryStorage(); // Store files in memory
 const upload = multer({ storage });
 
-// Update company by ID
-router.put('/updateCompany/:id', upload.single('logo'), async (req, res) => {
+
+// Add a bookmark
+router.post('/bookmarks', async (req, res) => {
   try {
-    const companyId = req.params.id;
-    let updateData = req.body;
-
-    // If a new logo is provided, add it to the updateData
-    if (req.file) {
-      updateData.logo = {
-        data: req.file.buffer,
-        contentType: req.file.mimetype
-      };
-    }
-
-    // Find and update the company
-    const company = await Company.findByIdAndUpdate(companyId, updateData, { new: true });
-
-    if (!company) {
-      return res.status(404).send({ error: 'Company not found' });
-    }
-
-    res.status(200).send(company);
+    const { companyId } = req.body;
+    const newBookmark = new Bookmark({ companyId });
+    await newBookmark.save();
+    res.status(201).send(newBookmark);
   } catch (error) {
-    console.error('Error in /updateCompany endpoint:', error.message); // Detailed logging
-    res.status(400).send({ error: 'An error occurred while processing the request.' });
+    res.status(500).send({ error: 'An error occurred while adding the bookmark.' });
   }
 });
 
+// Remove a bookmark
+router.delete('/bookmarks/:companyId', async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    const bookmark = await Bookmark.findOneAndDelete({ companyId });
+    if (!bookmark) {
+      return res.status(404).send({ message: 'Bookmark not found' });
+    }
+    res.status(200).send(bookmark);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+// Fetch bookmarks for a user
+router.get('/bookmarks', async (req, res) => {
+  try {
+    const bookmarks = await Bookmark.find({});
+    res.status(200).send(bookmarks);
+  } catch (error) {
+    res.status(500).send({ error: 'An error occurred while fetching bookmarks.' });
+  }
+});
+
+
+
+
+// Get all bookmarked companies
+router.get('/bookmarked-companies', async (req, res) => {
+  try {
+    const bookmarks = await Bookmark.find({});
+    const companyIds = bookmarks.map(bookmark => bookmark.companyId);
+    const companies = await Company.find({ _id: { $in: companyIds } });
+
+    // Convert image data to base64 string
+    const companiesWithBase64Images = companies.map(company => {
+      let imageSrc = '';
+      if (company.logo && company.logo.data) {
+        const base64Image = company.logo.data.toString('base64');
+        imageSrc = `data:${company.logo.contentType};base64,${base64Image}`;
+      }
+      return {
+        id: company._id,
+        name: company.name,
+        description: company.description,
+        logo: imageSrc
+      };
+    });
+
+    res.status(200).send({
+      total: companiesWithBase64Images.length,
+      companies: companiesWithBase64Images
+    });
+
+  } catch (error) {
+    res.status(500).send({ error: 'An error occurred while fetching bookmarked companies.' });
+  }
+});
+
+
+// Update logo for all companies
+router.put('/updateCompanyLogo', upload.single('logo'), async (req, res) => {
+  try {
+    // Ensure a new logo is provided
+    if (!req.file) {
+      return res.status(400).send({ error: 'No logo provided' });
+    }
+
+    // Prepare the new logo data
+    const newLogo = {
+      data: req.file.buffer,
+      contentType: req.file.mimetype
+    };
+
+    // Update all companies with the new logo
+    const result = await Company.updateMany({}, { $set: { logo: newLogo } });
+
+    res.status(200).send({ message: 'Logo updated for all companies', result });
+  } catch (error) {
+    console.error('Error in /updateCompanyLogo endpoint:', error.message); // Detailed logging
+    res.status(400).send({ error: 'An error occurred while processing the request.' });
+  }
+});
 
 
 // Create a company
@@ -257,6 +328,76 @@ router.get('/filters', async (req, res) => {
     res.status(500).send(error);
   }
 });
+
+
+
+const generateCompanyData = (numCompanies) => {
+  const companies = [];
+
+  for (let i = 0; i < numCompanies; i++) {
+    const company = new Company({
+      name: faker.company.name(),
+      website: faker.internet.url(),
+      description: faker.company.catchPhrase(),
+      foundedYear: faker.datatype.number({ min: 1900, max: 2024 }),
+      industry: faker.commerce.department(),
+      country: faker.address.country(),
+      companySize: `${faker.datatype.number({ min: 1, max: 5000 })} employees`,
+      contactInfo: {
+        email: faker.internet.email(),
+        phone: faker.phone.number(),
+        address: faker.address.streetAddress()
+      },
+      about: faker.lorem.paragraph(),
+      coreValues: [faker.company.bs(), faker.company.bs(), faker.company.bs()],
+      keyServices: [faker.company.bs(), faker.company.bs(), faker.company.bs()],
+      technologiesUsed: [faker.hacker.noun(), faker.hacker.noun(), faker.hacker.noun()],
+      industriesServed: [faker.commerce.department(), faker.commerce.department()],
+      solutions: [faker.lorem.sentence(), faker.lorem.sentence()],
+      usp: faker.lorem.sentence(),
+      useCases: [faker.lorem.paragraph(), faker.lorem.paragraph()],
+      caseStudies: [faker.lorem.paragraph(), faker.lorem.paragraph()],
+      ratings: {
+        customerSatisfaction: faker.datatype.number({ min: 1, max: 5 }),
+        industryRecognition: [faker.company.catchPhrase(), faker.company.catchPhrase()]
+      },
+      fundingStatuses: [faker.finance.amount(1, 100, 0, '$') + 'M', faker.finance.amount(1, 100, 0, '$') + 'M'],
+      productTypes: [faker.commerce.product(), faker.commerce.product()],
+      customerTypes: [faker.company.catchPhrase(), faker.company.catchPhrase()],
+      partners: [faker.company.name(), faker.company.name()],
+      awards: [faker.company.catchPhrase(), faker.company.catchPhrase()],
+      certifications: [faker.company.catchPhrase(), faker.company.catchPhrase()],
+      companyHistory: faker.lorem.paragraph(),
+      team: [
+        { name: faker.name.fullName(), role: faker.name.jobTitle(), experience: `${faker.datatype.number({ min: 1, max: 40 })} years` },
+        { name: faker.name.fullName(), role: faker.name.jobTitle(), experience: `${faker.datatype.number({ min: 1, max: 40 })} years` }
+      ],
+      sustainability: faker.lorem.paragraph(),
+      logo: {
+        data: Buffer.from(faker.image.dataUri(), 'base64'),
+        contentType: 'image/png'
+      }
+    });
+
+    companies.push(company);
+  }
+
+  return companies;
+};
+
+
+router.post('/insert-synthetic-data', async (req, res) => {
+  const numCompanies = req.body.numCompanies || 80; // Default to 10 if not provided
+  const companies = generateCompanyData(numCompanies);
+
+  try {
+    await Company.insertMany(companies);
+    res.status(201).json({ message: `Inserted ${numCompanies} companies into the database` });
+  } catch (error) {
+    res.status(500).json({ message: 'Error inserting companies', error });
+  }
+});
+
 
 
 module.exports = router;

@@ -77,7 +77,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ results, setResults }) => {
   };
 
   return (
-    <div className="flex flex-col items-center mt-4">
+    <div className="flex flex-col items-center ">
       <div className="relative w-full sm:w-[33rem]">
         <div className="flex items-center bg-white border border-gray-300 rounded-full shadow-sm p-2">
           <TextInput
@@ -112,13 +112,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ results, setResults }) => {
           </ul>
         )}
       </div>
-      {/* <div className="mt-4 w-full sm:w-[33rem]">
-        {(results || []).length > 0 && results.map((company) => (
-          <div key={company.id} className="p-4 bg-white border border-gray-300 rounded-md mb-2 shadow-sm">
-            <h3 className="font-semibold">{company.name}</h3>
-          </div>
-        ))}
-      </div> */}
+      
     </div>
   );
 };

@@ -30,7 +30,7 @@ const CardDetail: React.FC<CardDetailProps> = ({ company }) => {
         <strong>Industry:</strong> {company.industry}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
-        <strong>Country:</strong> {company.industry}
+        <strong>Country:</strong> {company.country}
       </p>
       <p className="font-normal text-gray-700 dark:text-gray-400 mt-2">
         <strong>Company Size:</strong>  {company.companySize}

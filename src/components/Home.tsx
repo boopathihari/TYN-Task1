@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Header from "./Header.tsx";
 import SearchBar from './SearchBar.tsx';
 import Accordion from './Accordion.tsx';
 import ViewType from '../components/ViewType.tsx';
-import CompanyList from '../components/CompanyList.tsx';
-import { IoMdClose } from "react-icons/io";
+import SkeletonCard from '../components/SkeletonCard.tsx'; // Import the skeleton component
+import { IoMdClose, IoMdArrowUp } from "react-icons/io";
 
 // Define the Company interface
 interface Company {
@@ -13,6 +13,9 @@ interface Company {
   description: string;
   logo: string;
 }
+
+// Lazy load the CompanyList component
+const CompanyList = React.lazy(() => import('../components/CompanyList.tsx'));
 
 const Home: React.FC = () => {
   const [activeView, setActiveView] = useState<"card" | "list">("card");
@@ -23,10 +26,24 @@ const Home: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [results, setResults] = useState<Company[]>([]);
+  const [showScroll, setShowScroll] = useState(false); // State for showing scroll button
 
   useEffect(() => {
     fetchData();
   }, [selectedFilters, searchTerm]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowScroll(true);
+      } else {
+        setShowScroll(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleFilterChange = (category: string, item: string, isSelected: boolean) => {
     setSelectedFilters(prevFilters => {
@@ -74,7 +91,7 @@ const Home: React.FC = () => {
     try {
       const response = await fetch(`http://localhost:3000/api/companies?${queryString}`);
       const data = await response.json();
-      setCompanies(data.companies); // Assuming `setCompanies` is used to store the fetched companies
+      setCompanies(data.companies);
       setResults(data.companies);
     } catch (error) {
       console.error('Error fetching company data:', error);
@@ -82,7 +99,6 @@ const Home: React.FC = () => {
       setLoading(false);
     }
   };
-
 
   const clearFilters = () => {
     setSelectedFilters({});
@@ -95,27 +111,29 @@ const Home: React.FC = () => {
     handleFilterChange(category, item, false);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
-    <div className='bg-[#f8f9fa] w-full mb-10'>
-      <Header results={results}  setResults={setResults} />
+    <div className=' w-full mb-10'>
+      <Header results={results} setResults={setResults} />
 
       <div className='w-[90%] mx-auto my-0 sm:flex gap-x-4 px-4 sm:mt-10 mb-10 mt-6'>
 
         {/* Filter Section */}
-        <section className='w-full sm:w-[25%] text-[14px]'> 
+        <section className='w-full sm:w-[25%] text-[14px]'>
           <Accordion onFilterChange={handleFilterChange} checkedState={checkedState} />
         </section>
 
         <div className='w-[100%] sm:p-4 py-4 sm:hidden '>
-          <SearchBar results={results}  setResults={setResults} />
+          <SearchBar results={results} setResults={setResults} />
         </div>
 
         {/* Companies List */}
         <section className='CardList sm:w-[75%] w-[100%] sm:mt-0 mt-4'>
-
           <div className='sm:flex justify-between items-center flex-none '>
-            <h1 className='sm:text-[2.4rem] text-3xl text-[#495057] font-medium '>Growth Tech Firms</h1>
+            <h1 className='  text-[#495057] font-medium sm:text-3xl lg:text-[2.4rem]'>Growth Tech Firms</h1>
             <div className='mt-2 sm:mt-0'>
               <ViewType activeView={activeView} setActiveView={setActiveView} />
             </div>
@@ -142,13 +160,34 @@ const Home: React.FC = () => {
 
           {/* Conditionally render based on activeView */}
           {loading ? (
-            <div>Loading...</div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <SkeletonCard key={index} />
+              ))}
+            </div>
           ) : (
-            <CompanyList viewType={activeView} companies={results} />
+            <Suspense fallback={
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
+                {Array.from({ length: 6 }).map((_, index) => (
+                  <SkeletonCard key={index} />
+                ))}
+              </div>
+            }>
+              
+              <CompanyList viewType={activeView} companies={results} />
+            </Suspense>
           )}
-
         </section>
       </div>
+
+      {showScroll && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-7 right-7 bg-[#22b8cf] text-white p-2 rounded-full shadow-md hover:bg-[#1098ad] transition"
+        >
+          <IoMdArrowUp size={24} />
+        </button>
+      )}
     </div>
   );
 };

@@ -116,7 +116,7 @@ const Home: React.FC = () => {
 
   return (
     <div className=' w-full mb-10'>
-      <Header results={results} setResults={setResults} />
+      <Header setResults={setResults} />
 
       <div className='w-[90%] mx-auto my-0 sm:flex gap-x-4 px-4 sm:mt-10 mb-10 mt-6'>
 

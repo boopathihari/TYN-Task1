@@ -16,11 +16,10 @@ interface Company {
 }
 
 interface SearchBarProps {
-  results: Company[];
   setResults: React.Dispatch<React.SetStateAction<Company[]>>;
 }
 
-const Header: React.FC<SearchBarProps> = ({ results, setResults }) => {
+const Header: React.FC<SearchBarProps> = ({ setResults }) => {
   return (
     
     <div className='p-2 bg-white sticky top-0 z-50 w-[100%]'>

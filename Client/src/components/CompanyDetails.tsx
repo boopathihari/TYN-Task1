@@ -23,8 +23,8 @@ import Others from '../components/CompanyDetails/Others';
 import { IoMdArrowBack } from "react-icons/io";
 
 export default function Component() {
-  const { id } = useParams(); // Get ID from URL params
-  const [company, setCompany] = useState<any>(null); // Replace 'any' with the proper type
+  const { id } = useParams();
+  const [company, setCompany] = useState<any>(null); 
   const [loading, setLoading] = useState(true);
   
   const tabsRef = useRef<TabsRef>(null);
@@ -35,7 +35,7 @@ export default function Component() {
     const fetchCompany = async () => {
       try {
         const response = await fetch(`https://tyn-task1.onrender.com/api/companies/${id}`);
-        console.log('Response:', response); // Log the response
+        console.log('Response:', response);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -62,7 +62,7 @@ export default function Component() {
           <Spinner aria-label="Extra large spinner example" size="xl" className='h-[50vh]' />
         </div>
       ) : (
-        company && ( // Check if company is not null
+        company && (
         <div className="relative w-[100%] mx-auto my-0">
           <div className="relative h-[100vh] w-[100%] ">
             <button

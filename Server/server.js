@@ -12,17 +12,14 @@ const port = process.env.PORT || 3000;
 
 
 
-app.use(cors()); // Allow all origins
+app.use(cors()); 
 
 
-// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Routes
 app.use('/api', companyRoutes);
 
-// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -32,7 +29,6 @@ mongoose.connect(process.env.MONGODB_URI, {
   console.error('Error connecting to MongoDB Atlas', err);
 });
 
-// Start server
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

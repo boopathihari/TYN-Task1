@@ -1,4 +1,4 @@
-import { Card } from 'flowbite-react'; // Adjust import based on your actual setup
+import { Card } from 'flowbite-react'; 
 import { Company } from './types';
 
 interface IndustryProps {
@@ -20,23 +20,6 @@ const Rating: React.FC<IndustryProps> = ({ company }) => {
 <div className="mt-4">
   <div className="flex  flex-col justify-start w-fit">
     <span className="text-lg font-semibold text-gray-900 dark:text-white">Customer Satisfaction:</span>
-    {/* <div className=" flex items-center mb-2">
-      <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 17.27L18.18 21 16.54 14.67 22 10.88 15.81 10.26 12 4 8.19 10.26 2 10.88 7.46 14.67 5.82 21 12 17.27z"/>
-      </svg>
-      <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 17.27L18.18 21 16.54 14.67 22 10.88 15.81 10.26 12 4 8.19 10.26 2 10.88 7.46 14.67 5.82 21 12 17.27z"/>
-      </svg>
-      <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 17.27L18.18 21 16.54 14.67 22 10.88 15.81 10.26 12 4 8.19 10.26 2 10.88 7.46 14.67 5.82 21 12 17.27z"/>
-      </svg>
-      <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 17.27L18.18 21 16.54 14.67 22 10.88 15.81 10.26 12 4 8.19 10.26 2 10.88 7.46 14.67 5.82 21 12 17.27z"/>
-      </svg>
-      <svg className="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 17.27L18.18 21 16.54 14.67 22 10.88 15.81 10.26 12 4 8.19 10.26 2 10.88 7.46 14.67 5.82 21 12 17.27z"/>
-      </svg>
-    </div> */}
 
     <span className=" text-gray-700 dark:text-gray-400"><span className='font-medium'>Rating:</span> {company.ratings.customerSatisfaction}</span>
   </div>

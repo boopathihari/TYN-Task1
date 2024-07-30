@@ -1,4 +1,4 @@
-import { Card } from 'flowbite-react'; // Adjust import based on your actual setup
+import { Card } from 'flowbite-react';
 import { Company } from './types';
 
 

@@ -12,7 +12,8 @@
     "format:check": "prettier . --check",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "remove-comments": "babel src --out-dir dist --extensions \".ts,.tsx\""
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",

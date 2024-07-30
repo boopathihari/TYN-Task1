@@ -1,4 +1,3 @@
-// SkeletonCard.tsx
 import React from 'react';
 
 const SkeletonCard: React.FC = () => {

@@ -2,16 +2,14 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const Company = require('../Models/company');
-const Bookmark = require('../Models/bookmark'); // Assuming you have a Bookmark model
+const Bookmark = require('../Models/bookmark'); 
 const { faker } = require('@faker-js/faker');
 
 
-// Set up multer for file uploads
-const storage = multer.memoryStorage(); // Store files in memory
+const storage = multer.memoryStorage(); 
 const upload = multer({ storage });
 
 
-// Add a bookmark
 router.post('/bookmarks', async (req, res) => {
   try {
     const { companyId } = req.body;
@@ -23,7 +21,6 @@ router.post('/bookmarks', async (req, res) => {
   }
 });
 
-// Remove a bookmark
 router.delete('/bookmarks/:companyId', async (req, res) => {
   try {
     const { companyId } = req.params;
@@ -37,7 +34,6 @@ router.delete('/bookmarks/:companyId', async (req, res) => {
   }
 });
 
-// Fetch bookmarks for a user
 router.get('/bookmarks', async (req, res) => {
   try {
     const bookmarks = await Bookmark.find({});
@@ -50,14 +46,12 @@ router.get('/bookmarks', async (req, res) => {
 
 
 
-// Get all bookmarked companies
 router.get('/bookmarked-companies', async (req, res) => {
   try {
     const bookmarks = await Bookmark.find({});
     const companyIds = bookmarks.map(bookmark => bookmark.companyId);
     const companies = await Company.find({ _id: { $in: companyIds } });
 
-    // Convert image data to base64 string
     const companiesWithBase64Images = companies.map(company => {
       let imageSrc = '';
       if (company.logo && company.logo.data) {
@@ -83,32 +77,27 @@ router.get('/bookmarked-companies', async (req, res) => {
 });
 
 
-// Update logo for all companies
 router.put('/updateCompanyLogo', upload.single('logo'), async (req, res) => {
   try {
-    // Ensure a new logo is provided
     if (!req.file) {
       return res.status(400).send({ error: 'No logo provided' });
     }
 
-    // Prepare the new logo data
     const newLogo = {
       data: req.file.buffer,
       contentType: req.file.mimetype
     };
 
-    // Update all companies with the new logo
     const result = await Company.updateMany({}, { $set: { logo: newLogo } });
 
     res.status(200).send({ message: 'Logo updated for all companies', result });
   } catch (error) {
-    console.error('Error in /updateCompanyLogo endpoint:', error.message); // Detailed logging
+    console.error('Error in /updateCompanyLogo endpoint:', error.message); 
     res.status(400).send({ error: 'An error occurred while processing the request.' });
   }
 });
 
 
-// Create a company
 router.post('/createCompany', async (req, res) => {
   try {
     let companyData = req.body;
@@ -121,7 +110,6 @@ router.post('/createCompany', async (req, res) => {
   }
 });
 
-// Get companies with search and filters
 router.get('/companies', async (req, res) => {
   try {
     const { search, industry, technology, country, analystrating, fundingStatus, companysize, foundedyear, producttypes, customertype } = req.query;
@@ -141,7 +129,6 @@ router.get('/companies', async (req, res) => {
       query.country = { $in: country.split(',') };
     }
     
-   // Handling rating filter
    if (analystrating) {
     const ratingRanges = analystrating.split(',');
     query.$or = query.$or || [];
@@ -195,7 +182,6 @@ router.get('/companies', async (req, res) => {
     
     const companies = await Company.find(query).select('name description logo').exec();
 
-    // Convert image data to base64 string
     const companiesWithBase64Images = companies.map(company => {
       let imageSrc = '';
       if (company.logo && company.logo.data) {
@@ -222,17 +208,14 @@ router.get('/companies', async (req, res) => {
   }
 });
 
-// Get a single company profile
 router.get('/companies/:id', async (req, res) => {
   try {
-    // Fetch a single company by ID
     const company = await Company.findById(req.params.id).exec();
 
     if (!company) {
       return res.status(404).send({ message: 'Company not found' });
     }
 
-    // Process the logo image to base64 format
     let imageSrc = '';
     if (company.logo && company.logo.data) {
       const base64Image = company.logo.data.toString('base64');
@@ -240,7 +223,6 @@ router.get('/companies/:id', async (req, res) => {
     }
 
     
-    // Prepare the response with all data
     const companyWithBase64Image = {
       _id: company._id.toString(), 
       name: company.name,
@@ -282,19 +264,15 @@ router.get('/companies/:id', async (req, res) => {
 
 
 
-// Delete all companies
 router.delete('/Deletecompanies', async (req, res) => {
   try {
-    // Remove all documents from the collection
     const result = await Company.deleteMany({});
     
-    // Send a response with the count of deleted documents
     res.status(200).send({
       message: 'All companies have been deleted.',
       deletedCount: result.deletedCount
     });
   } catch (error) {
-    // Handle errors
     res.status(500).send({
       message: 'Error deleting companies.',
       error: error.message
@@ -303,10 +281,8 @@ router.delete('/Deletecompanies', async (req, res) => {
 });
 
 
-// In your backend routes file
 router.get('/filters', async (req, res) => {
   try {
-    // Example query to get distinct filter options from the database
     const industries = await Company.distinct('industry');
     const technologies = await Company.distinct('technologiesUsed');
     const countries = await Company.distinct('country');
@@ -387,7 +363,7 @@ const generateCompanyData = (numCompanies) => {
 
 
 router.post('/insert-synthetic-data', async (req, res) => {
-  const numCompanies = req.body.numCompanies || 80; // Default to 10 if not provided
+  const numCompanies = req.body.numCompanies || 80; 
   const companies = generateCompanyData(numCompanies);
 
   try {

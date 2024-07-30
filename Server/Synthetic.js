@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const fs = require('fs');
-// const Company = require('../models/Company'); // Adjust the path as necessary
 const dotenv = require('dotenv');
 
 dotenv.config();
@@ -66,21 +65,3 @@ fs.writeFileSync('syntheticCompanies.json', JSON.stringify(companies, null, 2));
 
 console.log(`Generated ${numCompanies} companies and saved to syntheticCompanies.json`);
 
-// Uncomment the following section to save data to MongoDB
-
-// mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-//   .then(() => {
-//     console.log('Connected to MongoDB');
-//     Company.insertMany(companies)
-//       .then(() => {
-//         console.log(`Inserted ${numCompanies} companies into the database`);
-//         mongoose.connection.close();
-//       })
-//       .catch(err => {
-//         console.error('Error inserting companies:', err);
-//         mongoose.connection.close();
-//       });
-//   })
-//   .catch(err => {
-//     console.error('Error connecting to MongoDB:', err);
-//   });

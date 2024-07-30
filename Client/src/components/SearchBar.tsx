@@ -12,7 +12,6 @@ interface Company {
 }
 
 interface SearchBarProps {
-  // results: Company[];
   setResults: React.Dispatch<React.SetStateAction<Company[]>>;
 }
 
@@ -45,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ setResults }) => {
   const fetchSuggestions = async (term: string) => {
     try {
       const response = await axios.get(`https://tyn-task1.onrender.com/api/companies?search=${term}`);
-      setSuggestions(response.data.companies.slice(0, 5)); // Display top 5 suggestions
+      setSuggestions(response.data.companies.slice(0, 5)); 
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }

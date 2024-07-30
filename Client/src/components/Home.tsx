@@ -3,10 +3,9 @@ import Header from "./Header.tsx";
 import SearchBar from './SearchBar.tsx';
 import Accordion from './Accordion.tsx';
 import ViewType from '../components/ViewType.tsx';
-import SkeletonCard from '../components/SkeletonCard.tsx'; // Import the skeleton component
+import SkeletonCard from '../components/SkeletonCard.tsx'; 
 import { IoMdClose, IoMdArrowUp } from "react-icons/io";
 
-// Define the Company interface
 interface Company {
   id: string;
   name: string;
@@ -14,7 +13,6 @@ interface Company {
   logo: string;
 }
 
-// Lazy load the CompanyList component
 const CompanyList = React.lazy(() => import('../components/CompanyList.tsx'));
 
 const Home: React.FC = () => {
@@ -25,7 +23,7 @@ const Home: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [results, setResults] = useState<Company[]>([]);
-  const [showScroll, setShowScroll] = useState(false); // State for showing scroll button
+  const [showScroll, setShowScroll] = useState(false); 
 
   useEffect(() => {
     fetchData();
@@ -103,7 +101,7 @@ const Home: React.FC = () => {
     setSelectedFilters({});
     setCheckedState({});
     setSearchTerm('');
-    fetchData(); // Fetch all data without filters
+    fetchData(); 
   };
 
   const handleRemoveFilter = (category: string, item: string) => {
@@ -120,7 +118,6 @@ const Home: React.FC = () => {
 
       <div className='w-[90%] mx-auto my-0 sm:flex gap-x-4 px-4 sm:mt-10 mb-10 mt-6'>
 
-        {/* Filter Section */}
         <section className='w-full sm:w-[25%] text-[14px]'>
           <Accordion onFilterChange={handleFilterChange} checkedState={checkedState} />
         </section>
@@ -129,7 +126,6 @@ const Home: React.FC = () => {
           <SearchBar setResults={setResults} />
         </div>
 
-        {/* Companies List */}
         <section className='CardList sm:w-[75%] w-[100%] sm:mt-0 mt-4'>
           <div className='sm:flex justify-between items-center flex-none '>
             <h1 className='  text-[#495057] font-medium sm:text-3xl lg:text-[2.4rem]'>Growth Tech Firms</h1>
@@ -138,7 +134,6 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          {/* Selected Filters */}
           <div className='flex flex-wrap gap-2 mt-4'>
             {Object.entries(selectedFilters).map(([category, items]) =>
               items.map(item => (
@@ -157,7 +152,6 @@ const Home: React.FC = () => {
             )}
           </div>
 
-          {/* Conditionally render based on activeView */}
           {loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-6">
               {Array.from({ length: 6 }).map((_, index) => (

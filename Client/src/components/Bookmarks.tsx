@@ -4,7 +4,6 @@ import { FaBookmark } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Header2 from './Header2';
 
-// Define the Company interface
 interface Company {
   id: string;
   name: string;
@@ -12,7 +11,6 @@ interface Company {
   logo: string;
 }
 
-// Function to truncate text
 const truncateText = (text: string, maxLength: number) => {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + "...";

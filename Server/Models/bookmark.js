@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const bookmarkSchema = new Schema({
   companyId: {
     type: Schema.Types.ObjectId,
-    ref: 'Company', // Assuming you have a Company model
+    ref: 'Company', 
     required: true
   },
   createdAt: {

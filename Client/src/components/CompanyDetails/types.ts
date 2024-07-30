@@ -1,4 +1,3 @@
-// types.ts
 export interface ContactInfo {
     email: string;
     phone: string;
